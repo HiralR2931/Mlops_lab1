@@ -1,21 +1,20 @@
 # MLOps Lab 1 – GitHub Actions Basics
 
-A small calculator module tested automatically with **pytest** and **unittest** on every push to `main` using GitHub Actions.
+A small calculator module tested automatically with **pytest** and **unittest** using GitHub Actions.
 
 ## Project structure
 
 ```
-Mlops_Lab1/
+Mlops_lab1/
 ├── .github/workflows/
-│   ├── github_lab1_pytest_action.yml   # CI: runs pytest, uploads XML report
-│   └── unittest_action.yml             # CI: runs unittest
+│   ├── pytest_action.yml        # CI: runs pytest on every push
+│   └── unittest_action.yml      # CI: runs unittest on push / PR to main
 ├── src/
 │   ├── __init__.py
-│   └── calculator.py                   # add, subtract, multiply, power, modulo, compound_operation
+│   └── calculator.py            # add, subtract, multiply, power, modulo, compound_operation
 ├── tests/
 │   ├── test_calculator_pytest.py
 │   └── test_calculator_unittest.py
-├── .gitignore
 ├── README.md
 └── requirements.txt
 ```
@@ -44,6 +43,11 @@ python -m pytest tests/ -v
 python -m unittest discover -s tests -p "test_calculator_unittest.py" -v
 ```
 
-## CI
+## CI workflows
 
-On every push or pull request to `main`, both workflows run on an Ubuntu runner. Results appear in the repo's **Actions** tab; the pytest workflow also uploads `pytest-report.xml` as an artifact.
+| Workflow | Trigger | Python | Command |
+|---|---|---|---|
+| Testing with Pytest (`pytest_action.yml`) | every push | 3.8 | `pytest tests/ -v` |
+| Testing with Unittest (`unittest_action.yml`) | push / PR to `main` | 3.9 | `python -m unittest tests.test_calculator_unittest -v` |
+
+Both run on an Ubuntu runner. Results appear in the repo's **Actions** tab, and the unittest workflow prints a pass/fail message at the end.
